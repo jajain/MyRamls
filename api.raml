@@ -1,0 +1,79 @@
+#%RAML 0.8
+title: Library Members API
+version: 1.0
+baseUri: http://localhost:8081/api/{version}
+
+/members:
+  memberName: All Member Info details
+  get:
+    description: Get All member info details.
+    queryParameters:
+      category:
+        default: all
+        enum: [all,temporary,permanent,esteemed]
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {"members":[{"FirstName":"Jatin","LastName":"Jain","MemberNo":"123456","Country":"INDIA"},{"FirstName":"Kalapesha","LastName":"Bhoirendra","MemberNo":"123457","Country":"INDIA"},{"FirstName":"John","LastName":"Doe","MemberNo":"123458","Country":"INDIA"}]}
+  post:
+    description: Create a new member details
+    body:
+      application/json:
+        example: |
+          {"FirstName":"Jatin","LastName":"Jain","MemberNo":"123456","Country":"INDIA"}
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {"status":"success"}
+      201:
+        description: member has been created successfully.
+      409:
+        description: member already exists.
+  /{memberNo}:
+    displayName: Single Member Info details
+    uriParameters: 
+      memberNo:
+        description: member Identifier
+        required: true
+    get:
+      description: Get single member info details using memberNo.
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {"member":[{"FirstName":"Jatin","LastName":"Jain","MemberNo":"123456","Country":"INDIA"}]}
+        404:
+          description: Unable to find member with the given memberNo.
+    put:
+      description: Update Member info details using MemberNo.
+      body:
+        application/json:
+          example: |
+            {"FirstName":"Jatin","LastName":"Jain","MemberNo":"123456","Country":"INDIA"}
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {"status":"success"}
+        204:
+          description: The member has been updated successfully.
+        404:
+          description: Unable to find member with the given memberNo.
+    delete:
+      description: Remove Member
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {"status":"success"}
+        204:
+          description: The member has been deleted successfully.
+        404:
+          description: Unable to find member with the given memberNo.
